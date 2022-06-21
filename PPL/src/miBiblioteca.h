@@ -13,7 +13,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "inputFuntions.h"
-#define LEN 2000 // El maximo es 2000 pasajeros!
+#define LEN 1000
 
 /** \brief Esta funcion muestra el menu de opciones del menu principal.
 *   \return void
@@ -24,6 +24,11 @@ void mostrarMenu();
 *   \return void
 */
 void mostrarMenuModificacion();
+
+/** \brief Esta funcion muestra el menu de los tipos de Albumes.
+*   \return void
+*/
+void mostrarMenuTiposAlbum();
 
 /** \brief Esta funcion hardcodea x cantidad de entidades dentro de la lista indicada.
 *   \param list Passenger* Pointer to array of passenger
@@ -91,6 +96,12 @@ int informarInformacion(float* total, float* promedio, int* cantidad);
 */
 int formalizarNombre(char* cadena, int len);
 
+/** \brief Pide la fecha (dia, mes, anio).
+*   \param int* dia, la direccion de memoria donde se guardara el dia.
+*   \param int* mes, la direccion de memoria donde se guardara el mes.
+*   \param int* anio, la direccion de memoria donde se guardara el anio.
+*   \return void
+*/
 void pedirFecha(int* dia, int* mes, int* anio);
 
 #endif /* MIBIBLIOTECA_H_ */

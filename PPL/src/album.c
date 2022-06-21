@@ -19,6 +19,7 @@ int inicializarAlbunes(eAlbum* list, int len){
             list[i].importe = -1;
             list[i].isEmpty = 1;
             list[i].codigoArtista = 0;
+            list[i].idTipoAlbum = 0;
         }
         result = 0;
     }
@@ -31,6 +32,7 @@ int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer){
     char titulo[buffer];
     int dia, mes, anio;
     float importe;
+    int tipoAlbum;
     char respuesta;
     int bandera = 0;
 
@@ -57,7 +59,10 @@ int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer){
             getNumeroFloat(&importe,"\nIngrese el importe: ", "\nERROR! Valor ingresado invalido\n", 0, 99999, 0, buffer);
             fflush(stdin);
 
-            if(addAlbum(list, len, codigoArtista, id, titulo, dia, mes, anio, importe) == -1)
+            mostrarMenuTiposAlbum();
+            getNumeroInt(&tipoAlbum,"\nIngrese el Tipo de Album: ", "\nERROR! Valor ingresado invalido\n", 1, 3, 0, buffer);
+
+            if(addAlbum(list, len, codigoArtista, id, titulo, dia, mes, anio, importe, tipoAlbum) == -1)
             	printf("\nError! Invalid length or NULL pointer, al agregar el album la lista!\n");
 
             printf("\nDesea cargar otro pasajero(S/N)?: ");
@@ -76,7 +81,7 @@ int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer){
     return id;
 }
 
-int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], int dia, int mes, int anio, float importe){
+int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], int dia, int mes, int anio, float importe, int tipoAlbum){
 	int espacioVacio;
 	int resultado = -1;
 
@@ -91,6 +96,7 @@ int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], in
 	    list[espacioVacio].fecha.mes = mes;
 	    list[espacioVacio].fecha.anio = anio;
 	    list[espacioVacio].importe = importe;
+	    list[espacioVacio].idTipoAlbum = tipoAlbum;
 	    list[espacioVacio].isEmpty = 0;
 	    resultado = 0;
 	}
@@ -146,10 +152,12 @@ int menuModificacion(eAlbum* list, int index, int buffer){
 	if(list != NULL && index > -1 && buffer > 0){
 		do{
 			mostarMenuModificacion();
-			opcionMenu = pedirNumeroEntero("\tIngrese una opcion del menu de modificacion: ");
+			getNumeroInt(&opcionMenu,"\tIngrese una opcion del menu de modificacion: ", "\nERROR! Valor ingresado invalido\n", 1, 5, 0, buffer);
+			fflush(stdin);
+
 			switch(opcionMenu){
 				case 1:
-					pedirUnaCadenaAlpha(list[index].titulo, "\nIngrese el nuevo titulo del album: ", buffer);// Esto habria que cambiarlo, 51 por una CONSTANTE...
+					pedirUnaCadenaAlpha(list[index].titulo, "\n\tIngrese el nuevo titulo del album: ", buffer);// Esto habria que cambiarlo, 51 por una CONSTANTE...
 					break;
 				case 2:
 					pedirFecha(&dia, &mes, &anio);
@@ -158,27 +166,22 @@ int menuModificacion(eAlbum* list, int index, int buffer){
 					list[index].fecha.anio = anio;
 					break;
 				case 3:
-					list[index].importe = pedirNumeroFlotante("\nIngrese el nuevo importe: ");
+					getNumeroFloat(&list[index].importe,"\n\tIngrese el nuevo importe: ", "\nERROR! Valor ingresado invalido\n", 0, 99999, 0, buffer);
+					fflush(stdin);
+					break;
+				case 4:
+					mostrarMenuTiposAlbum();
+					getNumeroInt(&list[index].idTipoAlbum,"\nIngrese el Tipo de Album: ", "\nERROR! Valor ingresado invalido\n", 1, 3, 0, buffer);
 					break;
 				default:
-					if(opcionMenu < 1 || opcionMenu > 4){
+					if(opcionMenu < 1 || opcionMenu > 5){
 						printf("\nERROR! Debe ingresar una opcion del menu de modificacion!\n");
 					}
-						system("pause");
-						break;
 			}
-		}while(opcionMenu != 4);
+		}while(opcionMenu != 5);
 		result = 0;
 	}
 	return result;
-}
-
-void mostarMenuModificacion(){
-	printf("\n\tMenu de Modificacion\n");
-	printf("\t1. Titulo\n");
-	printf("\t2. Fecha\n");
-	printf("\t3. Importe\n");
-	printf("\t4. Salir\n\n");
 }
 
 int darBajaAlbum(eAlbum* list, int len){
@@ -294,14 +297,14 @@ int contarTodosLosAlbunesMenoresAnio(eAlbum* list, int len, int anio){
 	return contador;
 }
 
-int listarTodosLosAlbunes(eAlbum* list, int len){
+int listarTodosLosAlbunes(eAlbum* list, eTipoAlbum* list2, int len){
 	int result = -1;
 
 	if(list != NULL && len > 0){
 		printf("\nTodos los Albunes (dd/mm/aaaa)\n");
 		for(int i = 0; i < len; i++){
 			if(list[i].isEmpty == 0)
-				printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe);
+				printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f, Tipo de Album: %51s\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe, list2[list[i].idTipoAlbum - 1].descripcion);
 		}
 		result = 0;
 	}
@@ -434,4 +437,18 @@ int listarAlbunesDeArtistas(eAlbum* list, eArtista* list2, int len){
 	}
 
 	return retorno;
+}
+
+int listarAlbumesViniloArtista(eAlbum* list, eTipoAlbum* list2, int len){
+	int result = -1;
+
+	if(list != NULL && len > 0){
+		printf("\nTodos los Tipos de Albunes\n");
+		for(int i = 0; i < len; i++){
+			if(list[i].isEmpty == 0 && list[i].idTipoAlbum == 2)
+				printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f, Tipo de Album: %51s\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe, list2[list[i].idTipoAlbum - 1].descripcion);
+		}
+		result = 0;
+	}
+	return result;
 }

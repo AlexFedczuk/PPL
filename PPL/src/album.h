@@ -12,6 +12,7 @@
 #include "miBiblioteca.h"
 #include "inputFuntions.h"
 #include "artista.h"
+#include "tipoAlbum.h"
 
 typedef struct{
 	int dia;
@@ -26,6 +27,7 @@ typedef struct{
     float importe;
     int isEmpty;
     int codigoArtista;
+    int idTipoAlbum;
 }eAlbum;
 
 /** \brief Esta funcion inicializa los valores de todas las entidades, dentro de la lista ingresada.
@@ -54,7 +56,7 @@ int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer);
 *   \param float importe
 *   \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
 */
-int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], int dia, int mes, int anio, float importe);
+int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], int dia, int mes, int anio, float importe, int tipoAlbum);
 
 /** \brief Esta funcion se encarga de modificar una entidad.
 *   \param list eAlbum*
@@ -149,7 +151,7 @@ int contarTodosLosAlbunesMenoresAnio(eAlbum* list, int len, int anio);
 	params int len
 	return (-1) if [Error if list NULL or if len invalid lenght] - (0) if Ok.
 */
-int listarTodosLosAlbunes(eAlbum* list, int len);
+int listarTodosLosAlbunes(eAlbum* list, eTipoAlbum* list2, int len);
 
 /*
 	brief Esta funcion lista todos los Albunes que son anteriores a x anio.
@@ -195,8 +197,28 @@ int listarTodosLosAlbunesMasCaros(eAlbum* list, int len, float numero);
 */
 float calcularAlbumMasCaro(eAlbum* list, int len);
 
+/*
+	brief Ordena la lista por importe y titulo.
+	params eAlbum* list
+	params int len
+	return (-1) if [Error if list NULL or if len invalid lenght] - the price of the most expensive album if Ok.
+*/
 int ordenarAlbunesImporteTitulo(eAlbum* list, int len);
 
+/*
+	brief Lista los albunes de los artistas.
+	params eAlbum* list
+	params int len
+	return (-1) if [Error if list NULL or if len invalid lenght] - the price of the most expensive album if Ok.
+*/
 int listarAlbunesDeArtistas(eAlbum* list, eArtista* list2, int len);
+
+/*
+	brief Lista los albunes de Vinilo con sus Artistas determinados.
+	params eAlbum* list
+	params int len
+	return (-1) if [Error if list NULL or if len invalid lenght] - the price of the most expensive album if Ok.
+*/
+int listarAlbumesViniloArtista(eAlbum* list, eTipoAlbum* list2, int len);
 
 #endif /* ALBUM_H_ */

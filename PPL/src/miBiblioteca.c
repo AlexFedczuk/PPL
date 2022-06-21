@@ -16,12 +16,20 @@ void mostrarMenu(){
     printf("6. Salir\n\n");
 }
 
-void mostrarMenuModificacion(){
-    printf("\n\tMenu de modificacion\n");
-    printf("\t1. TITULO.\n");
-    printf("\t2. FECHA DE PUBLICACION.\n");
-    printf("\t3. IMPORTE.\n");
-    printf("\t4. Salir\n\n");
+void mostarMenuModificacion(){
+	printf("\n\tMenu de Modificacion\n");
+	printf("\t1. Titulo\n");
+	printf("\t2. Fecha\n");
+	printf("\t3. Importe\n");
+	printf("\t4. Tipo de Album\n");
+	printf("\t5. Salir\n\n");
+}
+
+void mostrarMenuTiposAlbum(){
+	printf("\nElegir Tipo de Album\n");
+	printf("1. Vinilo.\n");
+	printf("2. Cinta.\n");
+	printf("3. CD\n");
 }
 
 /*int hardcodearEntidades(ePassenger* list, int len, int* contadorId){
