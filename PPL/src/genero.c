@@ -4,6 +4,7 @@
  *  Created on: May 2, 2022
  *      Author: Alex Yago Fedczuk
  */
+#include "genero.h"
 
 int inicializarGeneros(eGenero* list, int len){
     int result = -1;
@@ -36,6 +37,20 @@ int hardcodearGeneros(eGenero* list, int len){
 
 	result = calcularIntMayor(idAux, 5);
 
+	return result;
+}
+
+int listarTodosLosGeneros(eGenero* list, int len){
+	int result = -1;
+
+	if(list != NULL && len > 0){
+		printf("\nTodos los Generos\n");
+		for(int i = 0; i < len; i++){
+			if(list[i].isEmpty == 0)
+				printf("Codigo de Genero: %4d, Descripcion: %51s\n",list[i].codigoGenero,list[i].descripcion);
+		}
+		result = 0;
+	}
 	return result;
 }
 

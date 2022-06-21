@@ -4,30 +4,46 @@
  *  Created on: Apr 25, 2022
  *      Author: Alex Yago Fedczuk
  */
-#include <stdio.h>
-#include <string.h>
 #include "miBiblioteca.h"
 
 void mostrarMenu(){
     printf("\nMenu pricipal\n");
-    printf("1. ALTAS\n");
-    printf("2. MODIFICAR\n");
+    printf("1. ALTAS.\n");
+    printf("2. MODIFICAR.\n");
     printf("3. BAJA\n");
     printf("4. INFORMAR\n");
     printf("5. LISTAR\n");
     printf("6. Salir\n\n");
 }
 
-int hardcodearProveedores(eProveedor* list, int len){
-	int idAux[5] = {1,2,3,4,5};
-	char descripcionAux[5][50] = {"ADECCO","ASE","AVATAR","CLOUDWARE","SAC"};
+void mostrarMenuModificacion(){
+    printf("\n\tMenu de modificacion\n");
+    printf("\t1. TITULO.\n");
+    printf("\t2. FECHA DE PUBLICACION.\n");
+    printf("\t3. IMPORTE.\n");
+    printf("\t4. Salir\n\n");
+}
+
+/*int hardcodearEntidades(ePassenger* list, int len, int* contadorId){
+	int idAux[5] = {*contadorId + 1,*contadorId + 2,*contadorId + 3,*contadorId + 4,*contadorId + 5};
+	char nameAux[5][50] = {"Ana Sara","Fara Fareeha","Bastion Metzen","Brigitte Lindholm","Coto Argentino"};
+	char lastNameAux[5][50] = {"Amari","Amari","Fortaleza","Reinhardt","Yo Te Conosco"};
+	int priceAux[5] = {15000.234,20500.12,2225750.56,55400.78,42600.12};
+	char flyCodeAux[5][50] = {"ar 1140","br 3251","eu 1234","ar 1278","ar 4500"};
+	int typePassengerAux[5] = {0,1,1,0,1};
+	int statusFlightAux[5] = {1,1,1,1,0};
 	int isEmptyAux[5] = {0,0,0,0,0};
 	int result = -1;
 
 	if(list != NULL && len > 0){
 		for(int i = 0; i < 5; i++){
-	        list[i].codigoProveedor = idAux[i];
-	        strcpy(list[i].descripcion, descripcionAux[i]);
+	        list[i].id = idAux[i];
+	        strcpy(list[i].name, nameAux[i]);
+	        strcpy(list[i].lastName, lastNameAux[i]);
+	        list[i].price = priceAux[i];
+	        strcpy(list[i].flyCode, flyCodeAux[i]);
+	        list[i].typePassenger = typePassengerAux[i];
+	        list[i].statusFlight = statusFlightAux[i];
 	        list[i].isEmpty = isEmptyAux[i];
 		}
 		result = 0;
@@ -36,31 +52,7 @@ int hardcodearProveedores(eProveedor* list, int len){
 	result = calcularIntMayor(idAux, 5);
 
 	return result;
-}
-
-int hardcodearProductos(eProducto* list, int len){
-	int idAux[5] = {1,2,3,4,5};
-	char descripcionAux[5][50] = {"PRODUCTO ADECCO","PRODUCTO ASE","PRODUCTO AVATAR","PRODUCTO CLOUDWARE","PRODUCTO SAC"};
-	int importeAux[5] = {15000.234,20500.12,2225750.56,55400.78,42600.12};
-	int cantidadAux[5] = {5,10,8,2,1};
-	int isEmptyAux[5] = {0,0,0,0,0};
-	int result = -1;
-
-	if(list != NULL && len > 0){
-		for(int i = 0; i < 5; i++){
-	        list[i].codigoProducto = idAux[i];
-	        strcpy(list[i].descripcion, descripcionAux[i]);
-	        list[i].importe = importeAux[i];
-	        strcpy(list[i].cantidad, cantidadAux[i]);
-	        list[i].isEmpty = isEmptyAux[i];
-		}
-		result = 0;
-	}
-
-	result = calcularIntMayor(idAux, 5);
-
-	return result;
-}
+}*/
 
 int calcularIntMayor(int vec[], int len){
 	int result;
@@ -76,42 +68,89 @@ int calcularIntMayor(int vec[], int len){
 	return result;
 }
 
-char pedirUnCaracterAlphaMinuscula(char mensaje[]){
-    char result;
+/*float calcularTotal(ePassenger* list, int len){
+    float retorno = -1;
 
-    do{
-        printf(mensaje);
-        fflush(stdin);
-        ("%c", &result);
-        if(isalpha(result) != 0){
-            result = tolower(result);
-        }else{
-            printf("\nError! Debe ingresar caracteres alfabeticos!\n");
-        }
-    }while(isalpha(result) != 0);
-
-
-    return result;
-}
-
-void formalizarUnaCadena(char cadena[], int buffer){ // Probar esta nueva funcion!
-    for(int i = 0; i < buffer; i++){
-        if(i == 0){
-            cadena[i] = toupper(cadena[i]);
-            //toupper(cadena[i]);
-        }else{
-            cadena[i] = tolower(cadena[i]);
-            //tolower(cadena[i]);
+    if(list != NULL && len > 0){
+        retorno = 0;
+        for(int i = 0; i < len; i++){
+            if(list[i].isEmpty == 0){
+                retorno = retorno + list[i].price;
+            }
         }
     }
+
+    return retorno;
+}*/
+
+/*float calcularPromedio(ePassenger* list, int len, float total){
+    float retorno = -1;
+    int contador = 0;
+
+    if(list != NULL && len > 0){
+        for(int i = 0; i < len; i++){
+            if(list[i].isEmpty == 0){
+                contador++;
+            }
+        }
+
+        if(contador != 0){
+            retorno = total / contador;
+        }
+    }
+    return retorno;
+}*/
+
+/*int calcularPasajerosMasPromedio(ePassenger* list, int len, float promedio){
+    int contador = -1;
+
+    if(list != NULL && len > 0){
+        contador = 0;
+        for(int i = 0; i < len; i++){
+            if(list[i].isEmpty == 0 && list[i].price > promedio){
+                contador++;
+            }
+        }
+    }
+    return contador;
+}*/
+
+int informarInformacion(float* total, float* promedio, int* cantidad){
+    int retorno = -1;
+    float totalAux,promedioAux;
+    int cantidadAux;
+
+
+
+    if(total != NULL && promedio != NULL && cantidad != NULL){
+        totalAux = *total;
+        promedioAux = *promedio;
+        cantidadAux = *cantidad;
+        printf("\nTotal de los precios de pasajeros: %.2f\nPromedio de los precios de pasajeros: %.2f\nCantidad de pasajeros que superan el promedio: %d\n",totalAux,promedioAux,cantidadAux);
+        retorno = 0;
+    }
+    return retorno;
+}
+
+int formalizarNombre(char* cadena, int len){
+    int retorno = -1;
+    if(cadena != NULL && len > 0){
+        for(int i = 0; i < len; i++){
+            if((i == 0 && isalpha(cadena[i])) || (cadena[i - 1] == ' ' && isalpha(cadena[i]))){
+                cadena[i] = toupper(cadena[i]);
+            }else{
+                cadena[i] = tolower(cadena[i]);
+            }
+        }
+        retorno = 0;
+    }
+    return retorno;
 }
 
 void pedirFecha(int* dia, int* mes, int* anio){
-	do{
-		mes = pedirNumeroEnteroNoNegativo("Ingrese el mes: ");
-	}while(dia < 1 || dia > 31);
+	getNumeroInt(mes, "\nIngrese el mes: ", "\nERROR! Valor invalido ingresado\n", 1, 31, 0, 4096);
 
-	switch(mes){
+	switch(*mes){
 		case 1:
 		case 3:
 		case 5:
@@ -119,47 +158,20 @@ void pedirFecha(int* dia, int* mes, int* anio){
 		case 8:
 		case 10:
 		case 12:
-			do{
-				dia = pedirNumeroEnteroNoNegativo("Ingrese el dia: ");
-				if(dia < 1 || dia > 31){
-					printf("ERROR! Ingreso un dia fuera de rango del mes!");
-				}
-			}while(dia < 1 || dia > 31);
+			getNumeroInt(dia, "\nIngrese el dia: ", "\nERROR! Valor invalido ingresado\n", 1, 31, 0, 4096);
 			break;
 		case 4:
 		case 6:
 		case 9:
 		case 11:
-			do{
-				dia = pedirNumeroEnteroNoNegativo("Ingrese el dia: ");
-				if(dia < 1 || dia > 30){
-					printf("ERROR! Ingreso un dia fuera de rango del mes!");
-				}
-			}while(dia < 1 || dia > 30);
+			getNumeroInt(dia, "\nIngrese el dia: ", "\nERROR! Valor invalido ingresado\n", 1, 30, 0, 4096);
 			break;
-		case 11:
-			do{
-				dia = pedirNumeroEnteroNoNegativo("Ingrese el dia: ");
-				if(dia < 1 || dia > 29){
-					printf("ERROR! Ingreso un dia fuera de rango del mes!");
-				}
-			}while(dia < 1 || dia > 29);
+		case 2:
+			getNumeroInt(dia, "\nIngrese el dia: ", "\nERROR! Valor invalido ingresado\n", 1, 29, 0, 4096);
 			break;
 		default:
 			break;
 
 	}
-
-	anio = pedirNumeroEntero("Ingrese el anio: ");
+	getNumeroInt(anio, "\nIngrese el anio: ", "\nERROR! Valor invalido ingresado\n", 1889, 2022, 0, 4096);
 }
-
-
-
-
-
-
-
-
-
-
-

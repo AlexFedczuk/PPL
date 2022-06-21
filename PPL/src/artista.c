@@ -4,6 +4,7 @@
  *  Created on: May 2, 2022
  *      Author: Alex Yago Fedczuk
  */
+#include "artista.h"
 
 int inicializarArtistas(eArtista* list, int len){
     int result = -1;
@@ -39,4 +40,16 @@ int hardcodearArtistas(eArtista* list, int len){
 	return result;
 }
 
+int listarTodosLosArtistas(eArtista* list, int len){
+	int result = -1;
 
+	if(list != NULL && len > 0){
+		printf("\nTodos los Artistas\n");
+		for(int i = 0; i < len; i++){
+			if(list[i].isEmpty == 0)
+				printf("Codigo de Artista: %4d, Nombre: %51s\n",list[i].codigoArtista,list[i].nombre);
+		}
+		result = 0;
+	}
+	return result;
+}
