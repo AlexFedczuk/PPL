@@ -12,7 +12,7 @@
 #include "miBiblioteca.h"
 
 typedef struct{
-    int codigoGenero;
+    int id;
     char descripcion[51];
     int isEmpty;
 }eGenero;

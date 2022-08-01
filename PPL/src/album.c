@@ -11,61 +11,111 @@ int inicializarAlbunes(eAlbum* list, int len){
 
     if(list != NULL && len > 0){
         for(int i = 0; i < len; i++){
-            list[i].codigoAlbum = 0;
+            list[i].id = 0;
             strcpy(list[i].titulo, " ");
             list[i].fecha.dia = 0;
             list[i].fecha.mes = 0;
             list[i].fecha.anio = -1;
             list[i].importe = -1;
             list[i].isEmpty = 1;
-            list[i].codigoArtista = 0;
-            list[i].idTipoAlbum = 0;
+            list[i].artista.id = 0;
+            strcpy(list[i].artista.nombre, " ");
+            list[i].tipoAlbum.id = 0;
+            strcpy(list[i].tipoAlbum.descripcion, " ");
         }
         result = 0;
     }
     return result;
 }
 
-int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer){
+int hardcodearAlbunes(eAlbum* list, int len){
+	int id[5] = {1,2,3,4,5};
+	char titulo[5][50] = {"Lalala","Lelele","Lilili","Lololo","Lululu"};
+	int dia[5] = {1,11,2,22,3};
+	int mes[5] = {1,11,2,12,3};
+	int anio[5] = {2001,2011,2022,2012,2003};
+	float importe[5] = {123.22,20234.55,345.66,678.99,987.76};
+	int isEmpty[5] = {0,0,0,0,0};
+	int idArtista[5] = {1,2,3,4,5};
+	char nombreArtista[5][50] = {"Clapton","Armstrong","Beatles","Cash","Jackson"};
+	int idTipoAlbum[5] = {1,2,3,2,1};
+	char descripcionTipoAlbum[5][50] = {"vinilo","cinta","CD","cinta","vinilo"};
+	
+	int result = -1;
+
+	if(list != NULL && len > 0){
+        for(int i = 0; i < len; i++){
+            list[i].id = id[i];
+            strcpy(list[i].titulo, titulo[i]);
+            list[i].fecha.dia = dia[i];
+            list[i].fecha.mes = mes[i];
+            list[i].fecha.anio = anio[i];
+            list[i].importe = importe[i];
+            list[i].isEmpty = isEmpty[i];
+            list[i].artista.id = idArtista[i];
+            strcpy(list[i].artista.nombre, nombreArtista[i]);
+            list[i].tipoAlbum.id = idTipoAlbum[i];
+            strcpy(list[i].tipoAlbum.descripcion, descripcionTipoAlbum[i]);
+        }
+        result = 0;
+    }
+
+	result = calcularIntMayor(id, 5);
+
+	return result;
+}
+
+int cargarAlbum(eAlbum* list, eTipoAlbum* listTipoAlbum, eArtista* listArtista, int len, int* pId){
 	int codigoArtista;
     int id;
-    char titulo[buffer];
+    char titulo[51];
     int dia, mes, anio;
     float importe;
-    int tipoAlbum;
+    int idArtista;
+    char nombreArtista[51];
+    int idTipoAlbum;
+    char descripcionTipoAlbum[51];
     char respuesta;
     int bandera = 0;
 
 
 
-    if(list != NULL && len > 0){
+    if(list != NULL && listTipoAlbum != NULL && len > 0){
         do{
-        	getNumeroInt(&codigoArtista,"\nIngrese el Codigo del Artista al que pertenecera este Album: ", "\nERROR! Valor ingresado invalido\n", 0, 5, 0, buffer);
-        	fflush(stdin);
-
-            if(bandera == 0){
+            /*if(bandera == 0){
             	id = contadorId;
             }else{
                 id++;
+            }*/
+            
+            if(bandera == 0){
+                id = *pId;
+            }else{
+                id = *pId + 1;
+                *pId = id;
             }
 
-            PedirNombre("\nIngrese el nombre del pasajero: ", titulo, 50);
+            PedirNombre("\nIngrese el nombre del Album: ", titulo, 50);
             fflush(stdin);
             formalizarNombre(titulo, strlen(titulo));
 
             pedirFecha(&dia, &mes, &anio);
             fflush(stdin);
 
-            getNumeroFloat(&importe,"\nIngrese el importe: ", "\nERROR! Valor ingresado invalido\n", 0, 99999, 0, buffer);
+            getNumeroFloat(&importe,"\nIngrese el importe: ", "\nERROR! Valor ingresado invalido\n", 0, 99999, 0, BUFFER_SIZE);
             fflush(stdin);
+            
+            listarTodosLosArtistas(listArtista, 5);
+            getNumeroInt(&idArtista,"\nIngrese el ID del Artista: ", "\nERROR! Valor ingresado invalido\n", 1, 5, 0, BUFFER_SIZE);
+            strcpy(nombreArtista, listArtista[idArtista - 1].nombre);
 
-            mostrarMenuTiposAlbum();
-            getNumeroInt(&tipoAlbum,"\nIngrese el Tipo de Album: ", "\nERROR! Valor ingresado invalido\n", 1, 3, 0, buffer);
+            listarTodosLosTiposAlbune(listTipoAlbum, 3);
+            getNumeroInt(&idTipoAlbum,"\nIngrese el ID del Tipo de Album: ", "\nERROR! Valor ingresado invalido\n", 1, 3, 0, BUFFER_SIZE);
+            strcpy(descripcionTipoAlbum, listTipoAlbum[idTipoAlbum - 1].descripcion);
 
-            if(addAlbum(list, len, codigoArtista, id, titulo, dia, mes, anio, importe, tipoAlbum) == -1)
-            	printf("\nError! Invalid length or NULL pointer, al agregar el album la lista!\n");
+            addAlbum(list, len, idArtista, id, titulo, dia, mes, anio, importe, idTipoAlbum, descripcionTipoAlbum, nombreArtista);
 
-            printf("\nDesea cargar otro pasajero(S/N)?: ");
+            printf("\nDesea cargar otro Album(S/N)?: ");
             fflush(stdin);
             scanf("%c", &respuesta);
             respuesta = tolower(respuesta);
@@ -81,7 +131,7 @@ int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer){
     return id;
 }
 
-int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], int dia, int mes, int anio, float importe, int tipoAlbum){
+int addAlbum(eAlbum* list, int len, int idArtista, int id, char* titulo, int dia, int mes, int anio, float importe, int idTipoAlbum, char* descripcionTipoAlbum, char* nombreArtista){
 	int espacioVacio;
 	int resultado = -1;
 
@@ -89,15 +139,18 @@ int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], in
 
 	if(list != 0 && len > 0 && espacioVacio != -1)
 	{
-		list[espacioVacio].codigoArtista = codigoArtista;
-		list[espacioVacio].codigoAlbum = id;
-	    strcpy(list[espacioVacio].titulo, titulo);
-	    list[espacioVacio].fecha.dia = dia;
-	    list[espacioVacio].fecha.mes = mes;
-	    list[espacioVacio].fecha.anio = anio;
-	    list[espacioVacio].importe = importe;
-	    list[espacioVacio].idTipoAlbum = tipoAlbum;
-	    list[espacioVacio].isEmpty = 0;
+		list[espacioVacio].id = id;
+        strcpy(list[espacioVacio].titulo, titulo);
+        list[espacioVacio].fecha.dia = dia;
+        list[espacioVacio].fecha.mes = mes;
+        list[espacioVacio].fecha.anio = anio;
+        list[espacioVacio].importe = importe;
+        list[espacioVacio].isEmpty = 0;
+        list[espacioVacio].artista.id = idArtista;
+        strcpy(list[espacioVacio].artista.nombre, nombreArtista);
+        list[espacioVacio].tipoAlbum.id = idTipoAlbum;
+        strcpy(list[espacioVacio].tipoAlbum.descripcion, descripcionTipoAlbum);
+        
 	    resultado = 0;
 	}
 
@@ -132,7 +185,7 @@ int findAlbumById(eAlbum* list, int len, int id){
 
 	if(list != NULL && len > 0 && id > 0){
 		for(int i = 0; i < len; i++){
-			if(list[i].codigoAlbum == id){
+			if(list[i].id == id){
 				index = i;
 				break;
 			}
@@ -157,7 +210,9 @@ int menuModificacion(eAlbum* list, int index, int buffer){
 
 			switch(opcionMenu){
 				case 1:
-					pedirUnaCadenaAlpha(list[index].titulo, "\n\tIngrese el nuevo titulo del album: ", buffer);// Esto habria que cambiarlo, 51 por una CONSTANTE...
+					PedirNombre("\n\tIngrese el nuevo titulo del album: ", list[index].titulo, BUFFER_SIZE);
+                    fflush(stdin);
+                    formalizarNombre(list[index].titulo, strlen(list[index].titulo));
 					break;
 				case 2:
 					pedirFecha(&dia, &mes, &anio);
@@ -171,7 +226,7 @@ int menuModificacion(eAlbum* list, int index, int buffer){
 					break;
 				case 4:
 					mostrarMenuTiposAlbum();
-					getNumeroInt(&list[index].idTipoAlbum,"\nIngrese el Tipo de Album: ", "\nERROR! Valor ingresado invalido\n", 1, 3, 0, buffer);
+					getNumeroInt(&list[index].tipoAlbum.id,"\nIngrese el Tipo de Album: ", "\nERROR! Valor ingresado invalido\n", 1, 3, 0, buffer);
 					break;
 				default:
 					if(opcionMenu < 1 || opcionMenu > 5){
@@ -213,7 +268,7 @@ int removeAlbum(eAlbum* list, int len, int id){
 
 	if(list != NULL && len > 0 && id > 0){
 		for(int i = 0; i < len; i++){
-			if(list[i].codigoAlbum == id){
+			if(list[i].id == id){
 				list[i].isEmpty = 1;
 				result = 0;
 				break;
@@ -297,14 +352,21 @@ int contarTodosLosAlbunesMenoresAnio(eAlbum* list, int len, int anio){
 	return contador;
 }
 
-int listarTodosLosAlbunes(eAlbum* list, eTipoAlbum* list2, int len){
+int listarTodosLosAlbunes(eAlbum* list, int len){
 	int result = -1;
 
 	if(list != NULL && len > 0){
 		printf("\nTodos los Albunes (dd/mm/aaaa)\n");
 		for(int i = 0; i < len; i++){
-			if(list[i].isEmpty == 0)
-				printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f, Tipo de Album: %51s\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe, list2[list[i].idTipoAlbum - 1].descripcion);
+			if(list[i].isEmpty == 0){
+			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f, Tipo de Album: %51s\n",list[i].id,
+			                                                                                                             list[i].titulo,
+			                                                                                                             list[i].fecha.dia,
+			                                                                                                             list[i].fecha.mes,
+			                                                                                                             list[i].fecha.anio,
+			                                                                                                             list[i].importe, 
+			                                                                                                             list[i].tipoAlbum.descripcion);
+			}
 		}
 		result = 0;
 	}
@@ -313,13 +375,24 @@ int listarTodosLosAlbunes(eAlbum* list, eTipoAlbum* list2, int len){
 
 int listarTodosLosAlbunesMenoresAnio(eAlbum* list, int len, int anio){
 	int result = -1;
+	int bandera = 0;
 
 	if(list != NULL && len > 0){
 		printf("\nTodos los Albunes menores a el anio %d (dd/mm/aaaa)\n", anio);
 		for(int i = 0; i < len; i++){
-			if(list[i].isEmpty == 0 && list[i].fecha.anio < anio) {
-			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe);
+			if(list[i].isEmpty == 0 && list[i].fecha.anio < anio){
+			    bandera = 1;
+			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].id,
+			                                                                                        list[i].titulo,
+			                                                                                        list[i].fecha.dia,
+			                                                                                        list[i].fecha.mes,
+			                                                                                        list[i].fecha.anio,
+			                                                                                        list[i].importe);
 			}
+		}
+		
+		if(bandera == 0){
+		    printf("No hay ningun Album menor a el anio %d\n", anio);
 		}
 		result = 0;
 	}
@@ -328,14 +401,26 @@ int listarTodosLosAlbunesMenoresAnio(eAlbum* list, int len, int anio){
 
 int listarTodosLosAlbunesMayoresPromedioImporte(eAlbum* list, int len, float importe){
 	int result = -1;
+	int bandera = 0;
 
 	if(list != NULL && len > 0){
 		printf("\nTodos los Albunes mayores al promedio %8.2f de importes\n", importe);
 		for(int i = 0; i < len; i++){
-			if(list[i].isEmpty == 0 && list[i].importe < importe) {
-			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe);
+			if(list[i].isEmpty == 0 && list[i].importe > importe){
+			    bandera = 1;
+			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].id,
+			                                                                                        list[i].titulo,
+			                                                                                        list[i].fecha.dia,
+			                                                                                        list[i].fecha.mes,
+			                                                                                        list[i].fecha.anio,
+			                                                                                        list[i].importe);
 			}
 		}
+		
+		if(bandera == 0){
+		    printf("No hay ningun Album mayor con un importe mayor a %.2f\n", importe);
+		}
+		
 		result = 0;
 	}
 	return result;
@@ -343,14 +428,26 @@ int listarTodosLosAlbunesMayoresPromedioImporte(eAlbum* list, int len, float imp
 
 int listarTodosLosAlbunesAnioDeterminado(eAlbum* list, int len, int anio){
 	int result = -1;
+	int bandera = 0;
 
 	if(list != NULL && len > 0){
 		printf("\nTodos los Albunes publicados el anio %d (dd/mm/aaaa)\n", anio);
 		for(int i = 0; i < len; i++){
-			if(list[i].isEmpty == 0 && list[i].fecha.anio == anio) {
-			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe);
+			if(list[i].isEmpty == 0 && list[i].fecha.anio == anio){
+			    bandera = 1;
+			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].id,
+			                                                                                        list[i].titulo,
+			                                                                                        list[i].fecha.dia,
+			                                                                                        list[i].fecha.mes,
+			                                                                                        list[i].fecha.anio,
+			                                                                                        list[i].importe);
 			}
 		}
+		
+		if(bandera == 0){
+		    printf("No hay ningun Album publicado el anio %d.\n", anio);
+		}
+		
 		result = 0;
 	}
 	return result;
@@ -360,10 +457,16 @@ int listarTodosLosAlbunesMasCaros(eAlbum* list, int len, float numero){
 	int result = -1;
 
 	if(list != NULL && len > 0){
-		printf("\nTodos los Albunes mas caros\n");
+		printf("\nTodos los Albunes mas caros %f\n", numero);
 		for(int i = 0; i < len; i++){
-			if(list[i].isEmpty == 0 && list[i].importe == numero)
-				printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe);
+			if(list[i].importe >= numero){
+			    printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[i].id,
+				                                                                                    list[i].titulo,
+				                                                                                    list[i].fecha.dia,
+				                                                                                    list[i].fecha.mes,
+				                                                                                    list[i].fecha.anio,
+				                                                                                    list[i].importe);
+			}
 		}
 		result = 0;
 	}
@@ -416,19 +519,23 @@ int ordenarAlbunesImporteTitulo(eAlbum* list, int len){
 	return retorno;
 }
 
-int listarAlbunesDeArtistas(eAlbum* list, eArtista* list2, int len){
+int listarAlbunesDeArtistas(eAlbum* list, eArtista* list2, int len, int len2){
 	int retorno = -1;
 
 	if(list != NULL && list2 != NULL && len > 0){
-		printf("\nTodos los álbumes de cada artista\n");
+		printf("\nTodos los Albumes de cada artista");
 
-		for(int i = 0; i < len; i++){
+		for(int i = 0; i < len2; i++){
 			if(list2[i].isEmpty == 0){
-				printf("\nArtista: %s\n",list2[i].nombre);
-
-				for(int j = i + 1; j < len; j++){
-					if(list2[i].codigoArtista == list[j].codigoArtista){
-						printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[j].codigoAlbum,list[j].titulo,list[j].fecha.dia,list[j].fecha.mes,list[j].fecha.anio,list[j].importe);
+				printf("\nArtista: %s\n", list2[i].nombre);
+				for(int j = 0; j < len; j++){
+					if(list2[i].id == list[j].id){
+						printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n",list[j].id,
+						                                                                                    list[j].titulo,
+						                                                                                    list[j].fecha.dia,
+						                                                                                    list[j].fecha.mes,
+						                                                                                    list[j].fecha.anio,
+						                                                                                    list[j].importe);
 					}
 				}
 			}
@@ -443,12 +550,53 @@ int listarAlbumesViniloArtista(eAlbum* list, eTipoAlbum* list2, int len){
 	int result = -1;
 
 	if(list != NULL && len > 0){
-		printf("\nTodos los Tipos de Albunes\n");
+		printf("\nTodos los Albunes de Vinilo\n");
 		for(int i = 0; i < len; i++){
-			if(list[i].isEmpty == 0 && list[i].idTipoAlbum == 2)
-				printf("Codigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f, Tipo de Album: %51s\n",list[i].codigoAlbum,list[i].titulo,list[i].fecha.dia,list[i].fecha.mes,list[i].fecha.anio,list[i].importe, list2[list[i].idTipoAlbum - 1].descripcion);
+			if(list[i].isEmpty == 0 && list[i].tipoAlbum.id == 1)
+				printf("Codigo de Album: %4d, Titulo: %20s, Fecha: %02d/%02d/%4d, Importe: %8.2f, Tipo de Album: %10s\n", list[i].id,
+				                                                                                                          list[i].titulo,
+				                                                                                                          list[i].fecha.dia,
+				                                                                                                          list[i].fecha.mes,
+				                                                                                                          list[i].fecha.anio,
+				                                                                                                          list[i].importe,
+				                                                                                                          list[i].tipoAlbum.descripcion);
 		}
 		result = 0;
 	}
 	return result;
+}
+
+int listarTodosLosAlbumesCadaArtista(eAlbum* listAlbum, eArtista* listArtista,int lenAlbum, int lenArtista){
+	int result = -1;
+
+	if(listAlbum != NULL && lenAlbum > 0 && listArtista != NULL && lenArtista > 0){
+		printf("\nTodos los Albumes de cada Artista\n");
+		for(int j = 0; j < lenArtista; j++){
+		    if(listArtista[j].isEmpty == 0){
+		        printf("Codigo de Artista: %4d, Nombre: %51s\n",listArtista[j].id, listArtista[j].nombre);
+		        listarTodosLosAlbumesDeterminados(listAlbum, listArtista, lenAlbum, j);
+		    }
+		}
+		result = 0;
+	}
+	return result;
+}
+
+int listarTodosLosAlbumesDeterminados(eAlbum* listAlbum, eArtista* listArtista, int lenAlbum, int index){
+    int result = -1;
+
+    if(listAlbum != NULL && lenAlbum > 0 && listArtista != NULL){
+        for(int i = 0; i < lenAlbum; i++){
+    	    if(listAlbum[i].isEmpty == 0 && listAlbum[index].id == listArtista[i].id) {
+        	    printf("\tCodigo de Album: %4d, Titulo: %51s, Fecha: %02d/%02d/%4d, Importe: %8.2f\n", listAlbum[i].id,
+        	                                                                                           listAlbum[i].titulo,
+        	                                                                                           listAlbum[i].fecha.dia,
+        	                                                                                           listAlbum[i].fecha.mes,
+        	                                                                                           listAlbum[i].fecha.anio,
+        	                                                                                           listAlbum[i].importe);
+        	}
+        }
+    }
+
+    return result;
 }

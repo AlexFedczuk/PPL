@@ -12,7 +12,7 @@
 #include "miBiblioteca.h"
 
 typedef struct{
-    int codigoArtista;
+    int id;
     char nombre[51];
     int isEmpty;
 }eArtista;

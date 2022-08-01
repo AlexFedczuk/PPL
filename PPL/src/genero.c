@@ -11,7 +11,7 @@ int inicializarGeneros(eGenero* list, int len){
 
     if(list != NULL && len > 0){
         for(int i = 0; i < len; i++){
-            list[i].codigoGenero = 0;
+            list[i].id = 0;
             strcpy(list[i].descripcion, " ");
             list[i].isEmpty = 1;
         }
@@ -21,21 +21,21 @@ int inicializarGeneros(eGenero* list, int len){
 }
 
 int hardcodearGeneros(eGenero* list, int len){
-	int idAux[5] = {1,2,3,4,5};
-	char descripcionAux[5][50] = {"Blues","Jazz","Rock","Country","Disco"};
-	int isEmptyAux[5] = {0,0,0,0,0};
+	int id[5] = {1,2,3,4,5};
+	char descripcion[5][50] = {"Blues","Jazz","Rock","Country","Disco"};
+	int isEmpty[5] = {0,0,0,0,0};
 	int result = -1;
 
 	if(list != NULL && len > 0){
 		for(int i = 0; i < 5; i++){
-	        list[i].codigoGenero = idAux[i];
-	        strcpy(list[i].descripcion, descripcionAux[i]);
-	        list[i].isEmpty = isEmptyAux[i];
+	        list[i].id = id[i];
+	        strcpy(list[i].descripcion, descripcion[i]);
+	        list[i].isEmpty = isEmpty[i];
 		}
 		result = 0;
 	}
 
-	result = calcularIntMayor(idAux, 5);
+	result = calcularIntMayor(id, 5);
 
 	return result;
 }
@@ -47,7 +47,7 @@ int listarTodosLosGeneros(eGenero* list, int len){
 		printf("\nTodos los Generos\n");
 		for(int i = 0; i < len; i++){
 			if(list[i].isEmpty == 0)
-				printf("Codigo de Genero: %4d, Descripcion: %51s\n",list[i].codigoGenero,list[i].descripcion);
+				printf("Codigo de Genero: %4d, Descripcion: %51s\n",list[i].id,list[i].descripcion);
 		}
 		result = 0;
 	}

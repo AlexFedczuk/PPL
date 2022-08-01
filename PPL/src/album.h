@@ -21,13 +21,14 @@ typedef struct{
 }eFecha;
 
 typedef struct{
-    int codigoAlbum;
+    int id;
     char titulo[51];
     eFecha fecha;
     float importe;
+    eArtista artista;
+    eTipoAlbum tipoAlbum;
+    
     int isEmpty;
-    int codigoArtista;
-    int idTipoAlbum;
 }eAlbum;
 
 /** \brief Esta funcion inicializa los valores de todas las entidades, dentro de la lista ingresada.
@@ -37,13 +38,15 @@ typedef struct{
 */
 int inicializarAlbunes(eAlbum* list, int len);
 
+int hardcodearAlbunes(eAlbum* list, int len);
+
 /** \brief Esta funcion se encarga de solicitar por la informacion necesaria para la carga de una entidad.
 *   \param list eAlbum*
 *   \param len int
 *   \param contadorId int
 *   \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
 */
-int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer);
+int cargarAlbum(eAlbum* list, eTipoAlbum* listTipoAlbum, eArtista* listArtista, int len, int* pId);
 
 /** \brief Esta funcion se encarga de agregar una alta a la lista.
 *   \param list eAlbum*
@@ -56,7 +59,7 @@ int cargarAlbum(eAlbum* list, int len, int contadorId, int buffer);
 *   \param float importe
 *   \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
 */
-int addAlbum(eAlbum* list, int len, int codigoArtista, int id, char titulo[], int dia, int mes, int anio, float importe, int tipoAlbum);
+int addAlbum(eAlbum* list, int len, int idArtista, int id, char* titulo, int dia, int mes, int anio, float importe, int idTipoAlbum, char* descripcionTipoAlbum, char* nombreArtista);
 
 /** \brief Esta funcion se encarga de modificar una entidad.
 *   \param list eAlbum*
@@ -151,7 +154,7 @@ int contarTodosLosAlbunesMenoresAnio(eAlbum* list, int len, int anio);
 	params int len
 	return (-1) if [Error if list NULL or if len invalid lenght] - (0) if Ok.
 */
-int listarTodosLosAlbunes(eAlbum* list, eTipoAlbum* list2, int len);
+int listarTodosLosAlbunes(eAlbum* list, int len);
 
 /*
 	brief Esta funcion lista todos los Albunes que son anteriores a x anio.
@@ -211,7 +214,7 @@ int ordenarAlbunesImporteTitulo(eAlbum* list, int len);
 	params int len
 	return (-1) if [Error if list NULL or if len invalid lenght] - the price of the most expensive album if Ok.
 */
-int listarAlbunesDeArtistas(eAlbum* list, eArtista* list2, int len);
+int listarAlbunesDeArtistas(eAlbum* list, eArtista* list2, int len, int len2);
 
 /*
 	brief Lista los albunes de Vinilo con sus Artistas determinados.
@@ -220,5 +223,26 @@ int listarAlbunesDeArtistas(eAlbum* list, eArtista* list2, int len);
 	return (-1) if [Error if list NULL or if len invalid lenght] - the price of the most expensive album if Ok.
 */
 int listarAlbumesViniloArtista(eAlbum* list, eTipoAlbum* list2, int len);
+
+/*
+	brief Esta funcion se encarga de llamar la lista todos los Albumes de cada Artista.
+	params listAlbum* list
+	params eArtista* list
+	params int lenAlbum
+	params int lenArtista
+	return (-1) if [Error if list NULL or if len invalid lenght] - (0) if Ok.
+*/
+int listarTodosLosAlbumesCadaArtista(eAlbum* listAlbum, eArtista* listArtista, int lenAlbum, int lenArtista);// Voy a necesitar un ID que identifique entre dos identidades eAlbum -> eArtista.
+
+/*
+	brief Esta funcion lista todos los Albumes de cada Artista.
+	params listAlbum* list
+	params eArtista* list
+	params int lenAlbum
+	params int lenArtista
+	params int index
+	return (-1) if [Error if list NULL or if len invalid lenght] - (0) if Ok.
+*/
+int listarTodosLosAlbumesDeterminados(eAlbum* listAlbum, eArtista* listArtista,int lenAlbum, int index);// Voy a necesitar un ID que identifique entre dos identidades eAlbum -> eArtista
 
 #endif /* ALBUM_H_ */
