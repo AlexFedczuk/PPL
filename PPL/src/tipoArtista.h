@@ -17,8 +17,6 @@ typedef struct{
     int isEmpty;
 }eTipoArtista;
 
-
-
 /** \brief Esta funcion inicializa los valores de todas las entidades, dentro de la lista ingresada.
 *   \param list eTipoArtista* Pointer to array
 *   \param len int Array length

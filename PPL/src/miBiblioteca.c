@@ -181,5 +181,5 @@ void pedirFecha(int* dia, int* mes, int* anio){
 			break;
 
 	}
-	getNumeroInt(anio, "\nIngrese el anio: ", "\nERROR! Valor invalido ingresado\n", 1889, 2022, 0, 4096);
+	getNumeroInt(anio, "\nIngrese el anio: ", "\nERROR! Valor invalido ingresado\n", -2147483648, 2147483647, 0, 4096);
 }

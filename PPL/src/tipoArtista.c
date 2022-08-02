@@ -53,5 +53,3 @@ int listarTodosLosTiposArtista(eTipoArtista* list, int len){
 	}
 	return result;
 }
-
-
